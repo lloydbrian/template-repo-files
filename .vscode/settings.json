@@ -1,5 +1,6 @@
 {
-    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    // uncomment the interpreter setting on a true project workspace so that git repo points to the .venv version of python.
+    //"python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
     "python.terminal.activateEnvironment": true,
     "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font",
 }
