@@ -17,6 +17,7 @@ brew install git gh wget jq tree ripgrep fd fzf bat
 brew install coreutils gnu-sed
 brew install openssl readline zlib sqlite
 brew install zsh-autosuggestions zsh-syntax-highlighting starship
+brew install --cask font-jetbrains-mono-nerd-font   # or any Nerd Font
 brew install mise
 echo 'eval "$(mise activate zsh)"' >>~/.zshrc
 source ~/.zshrc
@@ -36,7 +37,30 @@ brew cleanup -s
 - `fzf` — fuzzy finder is an interactive fuzzy search tool (search files, search command history, build interactive menus, integrate with git, ripgrep, fd, and etc.)
 - `bat` — enhanced cat, bat is like cat, but with syntax highlighting, line numbers, git integration, paging
 
-3. Install visual studio code extensions
+#### 3. Configure Terminal or Console
+
+Copy templates:
+```
+cp ../template-terminal/starship.toml ~/.config/starship.toml #copy template to .config
+cat ../template-terminal/starship_zsh_integration.zsh >> ~/.zshrc #append starship config to zsh
+source ~/.zshrc
+```
+
+Install font to your terminal:
+Terminal.app (macOS default):
+```
+Terminal → Settings → Profiles
+Click Change... next to the font
+Search JetBrainsMono Nerd Font → select it
+```
+
+VS Code integrated terminal:
+Update settings.json and add line if does not exist
+```
+"terminal.integrated.fontFamily": "JetBrainsMono Nerd Font" 
+```
+
+#### 4. Install visual studio code extensions
 ```
 GitHub Copilot Chat
 Dev Containers

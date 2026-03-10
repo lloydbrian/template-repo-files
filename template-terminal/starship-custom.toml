@@ -1,0 +1,227 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# starship.toml — Extremely effective Starship prompt configuration
+# Location: ~/.config/starship.toml
+# Install: https://starship.rs/guide/#step-1-install-starship
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+
+
+# ── Global ────────────────────────────────────────────────────────────────────
+add_newline = true                    # Blank line between prompts
+command_timeout = 1000                # ms before a module is skipped
+
+# ── Prompt Layout ─────────────────────────────────────────────────────────────
+# Line 1: context + directory + git + lang runtimes + status flags
+# Line 2: shell indicator + input cursor
+format = """
+[╭─](bold dimmed white)\
+$os\
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$git_state\
+$git_metrics\
+$nodejs\
+$python\
+$golang\
+$rust\
+$java\
+$docker_context\
+$package\
+$aws\
+$gcloud\
+$env_var\
+$jobs\
+$cmd_duration\
+$line_break\
+[╰─](bold dimmed white)\
+$character"""
+
+# ── OS Icon ───────────────────────────────────────────────────────────────────
+[os]
+disabled = false
+format = "[$symbol](bold blue) "
+
+[os.symbols]
+Macos   = "󰀵"
+Ubuntu  = ""
+Debian  = ""
+Windows = "󰍲"
+Linux   = ""
+
+# ── Username ──────────────────────────────────────────────────────────────────
+[username]
+show_always = false                   # Only show when SSH or root
+style_user  = "bold cyan"
+style_root  = "bold red"
+format      = "[$user]($style)"
+
+# ── Hostname ──────────────────────────────────────────────────────────────────
+[hostname]
+ssh_only   = true
+format     = "[@$hostname](bold dimmed cyan) "
+disabled   = false
+
+# ── Directory ─────────────────────────────────────────────────────────────────
+[directory]
+style                     = "bold cyan"
+read_only                 = " 󰌾"
+read_only_style           = "red"
+truncation_length         = 4
+truncate_to_repo          = true
+truncation_symbol         = "…/"
+home_symbol               = "~"
+format                    = "[ $path]($style)[$read_only]($read_only_style) "
+
+[directory.substitutions]
+"~/dev"      = "󰲋 dev"
+"~/scripts"  = " scripts"
+"~/Downloads" = " downloads"
+"~/Desktop"  = "󰇄 desktop"
+
+# ── Git Branch ────────────────────────────────────────────────────────────────
+[git_branch]
+symbol    = " "
+style     = "bold purple"
+format    = "[$symbol$branch(:$remote_branch)]($style) "
+truncation_length = 28
+truncation_symbol = "…"
+
+# ── Git Status ────────────────────────────────────────────────────────────────
+[git_status]
+format      = "([$all_status$ahead_behind]($style) )"
+style       = "bold yellow"
+conflicted  = "⚡"
+ahead       = "⇡${count}"
+behind      = "⇣${count}"
+diverged    = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked   = "?${count}"
+stashed     = "󰏗 ${count}"
+modified    = "!${count}"
+staged      = "+${count}"
+renamed     = "»${count}"
+deleted     = "✘${count}"
+
+# ── Git State (rebase, merge, etc.) ──────────────────────────────────────────
+[git_state]
+format       = "[$state( $progress_current/$progress_total)]($style) "
+style        = "bold red"
+rebase       = "REBASE"
+merge        = "MERGE"
+revert       = "REVERT"
+cherry_pick  = "CHERRY"
+bisect       = "BISECT"
+am           = "AM"
+am_or_rebase = "AM/REBASE"
+
+# ── Git Metrics (lines added/removed) ────────────────────────────────────────
+[git_metrics]
+added_style   = "bold green"
+deleted_style = "bold red"
+format        = "([+$added]($added_style) )([-$deleted]($deleted_style) )"
+disabled      = false
+
+# ── Command Duration ──────────────────────────────────────────────────────────
+[cmd_duration]
+min_time          = 2_000             # Show if command took > 2s
+format            = "[ $duration]($style) "
+style             = "bold yellow"
+show_milliseconds = false
+
+# ── Jobs (background processes) ───────────────────────────────────────────────
+[jobs]
+format  = "[$symbol$number]($style) "
+symbol  = "󰒓 "
+style   = "bold blue"
+number_threshold = 1
+
+# ── Character (input cursor) ──────────────────────────────────────────────────
+[character]
+success_symbol  = "[❯](bold green)"
+error_symbol    = "[❯](bold red)"
+vimcmd_symbol   = "[❮](bold yellow)"          # Shows when in vi-mode
+
+# ── Node.js ───────────────────────────────────────────────────────────────────
+[nodejs]
+symbol          = " "
+style           = "bold green"
+format          = "[$symbol$version]($style) "
+detect_files    = ["package.json", ".nvmrc", ".node-version"]
+detect_folders  = ["node_modules"]
+
+# ── Python ────────────────────────────────────────────────────────────────────
+[python]
+symbol          = " "
+style           = "bold yellow"
+format          = "[$symbol$version( \\($virtualenv\\))]($style) "
+detect_files    = ["requirements.txt", "Pipfile", "pyproject.toml", ".python-version"]
+
+# ── Go ────────────────────────────────────────────────────────────────────────
+[golang]
+symbol          = " "
+style           = "bold cyan"
+format          = "[$symbol$version]($style) "
+detect_files    = ["go.mod", "go.sum", "main.go"]
+
+# ── Rust ──────────────────────────────────────────────────────────────────────
+[rust]
+symbol          = "󱘗 "
+style           = "bold red"
+format          = "[$symbol$version]($style) "
+detect_files    = ["Cargo.toml", "Cargo.lock"]
+
+# ── Java ──────────────────────────────────────────────────────────────────────
+[java]
+symbol          = " "
+style           = "bold red"
+format          = "[$symbol$version]($style) "
+detect_files    = ["pom.xml", "build.gradle"]
+
+# ── Docker Context ────────────────────────────────────────────────────────────
+[docker_context]
+symbol          = " "
+style           = "bold blue"
+format          = "[$symbol$context]($style) "
+only_with_files = true
+
+# ── Package Version ───────────────────────────────────────────────────────────
+[package]
+symbol          = "󰏗 "
+style           = "bold dimmed yellow"
+format          = "[$symbol$version]($style) "
+disabled        = false
+
+# ── AWS ───────────────────────────────────────────────────────────────────────
+[aws]
+symbol          = " "
+style           = "bold yellow"
+format          = "[$symbol$profile(\\($region\\))]($style) "
+disabled        = false
+
+# ── Google Cloud ─────────────────────────────────────────────────────────────
+[gcloud]
+symbol          = " "
+style           = "bold blue"
+format          = "[$symbol$account(@$domain)(\\($region\\))]($style) "
+disabled        = false
+
+# ── Environment Variables ─────────────────────────────────────────────────────
+# Uncomment + set variable name to surface a specific env var in prompt
+# [env_var.ENVIRONMENT]
+# variable = "ENVIRONMENT"
+# format   = "[$symbol$env_value]($style) "
+# style    = "bold dimmed green"
+# symbol   = "⚙ "
+
+# ── Disabled (noisy modules) ──────────────────────────────────────────────────
+[battery]
+disabled = true
+
+[time]
+disabled = true
+
+[shell]
+disabled = true

@@ -1,0 +1,242 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+# ─────────────────────────────────────────────────────────────────────────────
+# starship-tokyo-night-custom.toml
+# Layout   : Tokyo Night powerline segments
+# Modules  : Effective custom config (git metrics, os, runtimes, cloud, etc.)
+# Location : ~/.config/starship.toml
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Global ────────────────────────────────────────────────────────────────────
+add_newline    = true
+command_timeout = 1000
+
+# ── Tokyo Night Color Palette ─────────────────────────────────────────────────
+# bar_start : #a3aed2  (lavender header)
+# dir_bg    : #769ff0  (bright blue)
+# git_bg    : #394260  (dark navy)
+# lang_bg   : #212736  (darker navy)
+# time_bg   : #1d2230  (deepest navy)
+# fg_dark   : #090c0c  (near black — icon fg)
+# fg_light  : #e3e5e5  (near white — path text)
+# fg_muted  : #a0a9cb  (muted blue — time/meta text)
+
+# ── Prompt Layout ─────────────────────────────────────────────────────────────
+format = """
+[░▒▓](#a3aed2)\
+[ 󰀵 ](bg:#a3aed2 fg:#090c0c)\
+[](bg:#769ff0 fg:#a3aed2)\
+$username\
+$hostname\
+$directory\
+[](fg:#769ff0 bg:#394260)\
+$git_branch\
+$git_status\
+$git_state\
+$git_metrics\
+[](fg:#394260 bg:#212736)\
+$nodejs\
+$python\
+$golang\
+$rust\
+$java\
+$php\
+$docker_context\
+$package\
+$aws\
+$gcloud\
+[](fg:#212736 bg:#1d2230)\
+$jobs\
+$cmd_duration\
+$time\
+[ ](fg:#1d2230)\
+\n$character"""
+
+# ── OS Icon ───────────────────────────────────────────────────────────────────
+[os]
+disabled = true                       # Already shown as static icon in format bar
+
+[os.symbols]
+Macos   = "󰀵"
+Ubuntu  = ""
+Debian  = ""
+Windows = "󰍲"
+Linux   = ""
+
+# ── Username ──────────────────────────────────────────────────────────────────
+[username]
+show_always = false                   # Only shows on SSH or root
+style_user  = "fg:#e3e5e5 bg:#769ff0"
+style_root  = "bold fg:#ff5555 bg:#769ff0"
+format      = "[ $user ]($style)"
+
+# ── Hostname ──────────────────────────────────────────────────────────────────
+[hostname]
+ssh_only  = true
+style     = "fg:#a0a9cb bg:#769ff0"
+format    = "[@$hostname ]($style)"
+disabled  = false
+
+# ── Directory ─────────────────────────────────────────────────────────────────
+[directory]
+style             = "fg:#e3e5e5 bg:#769ff0"
+read_only         = " 󰌾"
+read_only_style   = "fg:#ff5555 bg:#769ff0"
+format            = "[ $path ]($style)[$read_only]($read_only_style)"
+truncation_length = 4
+truncate_to_repo  = true
+truncation_symbol = "…/"
+home_symbol       = "~"
+
+[directory.substitutions]
+"Documents"  = "󰈙 "
+"Downloads"  = " "
+"Music"      = " "
+"Pictures"   = " "
+"~/dev"      = "󰲋 dev"
+"~/scripts"  = " scripts"
+"~/Desktop"  = "󰇄 desktop"
+
+# ── Git Branch ────────────────────────────────────────────────────────────────
+[git_branch]
+symbol            = " "
+style             = "bg:#394260"
+format            = '[[ $symbol$branch ](fg:#769ff0 bg:#394260)]($style)'
+truncation_length = 28
+truncation_symbol = "…"
+
+# ── Git Status ────────────────────────────────────────────────────────────────
+[git_status]
+style      = "bg:#394260"
+format     = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
+conflicted = "⚡"
+ahead      = "⇡${count}"
+behind     = "⇣${count}"
+diverged   = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked  = "?${count}"
+stashed    = "󰏗 ${count}"
+modified   = "!${count}"
+staged     = "+${count}"
+renamed    = "»${count}"
+deleted    = "✘${count}"
+
+# ── Git State (rebase, merge, cherry-pick, etc.) ──────────────────────────────
+[git_state]
+style        = "fg:#ff5555 bg:#394260"
+format       = '[[ $state( $progress_current/$progress_total) ](fg:#ff5555 bg:#394260)]($style)'
+rebase       = "REBASE"
+merge        = "MERGE"
+revert       = "REVERT"
+cherry_pick  = "CHERRY"
+bisect       = "BISECT"
+am           = "AM"
+am_or_rebase = "AM/REBASE"
+
+# ── Git Metrics (lines added/removed) ────────────────────────────────────────
+[git_metrics]
+format        = '([+$added]($added_style) )([-$deleted]($deleted_style) )'
+added_style   = "fg:#9ece6a bg:#394260"
+deleted_style = "fg:#ff5555 bg:#394260"
+disabled      = false
+
+# ── Node.js ───────────────────────────────────────────────────────────────────
+[nodejs]
+symbol       = " "
+style        = "bg:#212736"
+format       = '[[ $symbol($version) ](fg:#769ff0 bg:#212736)]($style)'
+detect_files = ["package.json", ".nvmrc", ".node-version"]
+detect_folders = ["node_modules"]
+
+# ── Python ────────────────────────────────────────────────────────────────────
+[python]
+symbol       = " "
+style        = "bg:#212736"
+format       = '[[ $symbol($version)( \($virtualenv\)) ](fg:#769ff0 bg:#212736)]($style)'
+detect_files = ["requirements.txt", "Pipfile", "pyproject.toml", ".python-version"]
+
+# ── Go ────────────────────────────────────────────────────────────────────────
+[golang]
+symbol       = " "
+style        = "bg:#212736"
+format       = '[[ $symbol($version) ](fg:#769ff0 bg:#212736)]($style)'
+detect_files = ["go.mod", "go.sum", "main.go"]
+
+# ── Rust ──────────────────────────────────────────────────────────────────────
+[rust]
+symbol       = "󱘗 "
+style        = "bg:#212736"
+format       = '[[ $symbol($version) ](fg:#769ff0 bg:#212736)]($style)'
+detect_files = ["Cargo.toml", "Cargo.lock"]
+
+# ── Java ──────────────────────────────────────────────────────────────────────
+[java]
+symbol       = " "
+style        = "bg:#212736"
+format       = '[[ $symbol($version) ](fg:#769ff0 bg:#212736)]($style)'
+detect_files = ["pom.xml", "build.gradle"]
+
+# ── PHP ───────────────────────────────────────────────────────────────────────
+[php]
+symbol       = " "
+style        = "bg:#212736"
+format       = '[[ $symbol($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+# ── Docker Context ────────────────────────────────────────────────────────────
+[docker_context]
+symbol        = " "
+style         = "bg:#212736"
+format        = '[[ $symbol$context ](fg:#769ff0 bg:#212736)]($style)'
+only_with_files = true
+
+# ── Package Version ───────────────────────────────────────────────────────────
+[package]
+symbol   = "󰏗 "
+style    = "bg:#212736"
+format   = '[[ $symbol$version ](fg:#a0a9cb bg:#212736)]($style)'
+disabled = false
+
+# ── AWS ───────────────────────────────────────────────────────────────────────
+[aws]
+symbol   = " "
+style    = "bg:#212736"
+format   = '[[ $symbol$profile(\($region\)) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+# ── Google Cloud ──────────────────────────────────────────────────────────────
+[gcloud]
+symbol   = " "
+style    = "bg:#212736"
+format   = '[[ $symbol$account(@$domain)(\($region\)) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+# ── Jobs (background processes) ───────────────────────────────────────────────
+[jobs]
+style            = "bg:#1d2230"
+format           = '[[ 󰒓 $number ](fg:#a0a9cb bg:#1d2230)]($style)'
+number_threshold = 1
+
+# ── Command Duration ──────────────────────────────────────────────────────────
+[cmd_duration]
+min_time          = 2_000
+style             = "bg:#1d2230"
+format            = '[[ 󱑍 $duration ](fg:#a0a9cb bg:#1d2230)]($style)'
+show_milliseconds = false
+
+# ── Time ──────────────────────────────────────────────────────────────────────
+[time]
+disabled     = false
+time_format  = "%R"
+style        = "bg:#1d2230"
+format       = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
+
+# ── Character (input cursor) ──────────────────────────────────────────────────
+[character]
+success_symbol = "[❯](bold fg:#9ece6a)"
+error_symbol   = "[❯](bold fg:#ff5555)"
+vimcmd_symbol  = "[❮](bold fg:#e0af68)"
+
+# ── Disabled ──────────────────────────────────────────────────────────────────
+[battery]
+disabled = true
+
+[shell]
+disabled = true
