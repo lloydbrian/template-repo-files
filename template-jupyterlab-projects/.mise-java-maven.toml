@@ -1,0 +1,40 @@
+# .mise.toml — Java professional baseline (Maven)
+[tools]
+java = "21.0.2"
+maven = "3.9.8"
+
+[env]
+# Optional: keep output readable in CI
+MAVEN_OPTS = "-Dstyle.color=always"
+
+[tasks.bootstrap]
+description = "Verify toolchain and warm dependency cache"
+run = """
+java -version
+mvn -version
+mvn -q -DskipTests dependency:go-offline
+"""
+
+[tasks.format]
+description = "Format (if you use Spotless via Maven)"
+run = """
+mvn -q spotless:apply || true
+"""
+
+[tasks.verify]
+description = "Static analysis + build verification (if configured)"
+run = """
+mvn -q verify -DskipTests
+"""
+
+[tasks.test]
+description = "Run unit tests"
+run = """
+mvn -q test
+"""
+
+[tasks.ci]
+description = "CI gate: clean verify"
+run = """
+mvn -q clean verify
+"""

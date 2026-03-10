@@ -1,0 +1,53 @@
+# .mise.toml — Node.js professional baseline (Corepack + lockfile-driven installs)
+[tools]
+nodejs = "20.11.1"
+
+[env]
+NODE_ENV = "development"
+
+[tasks.bootstrap]
+description = "Install deps deterministically (choose npm OR pnpm OR yarn)"
+run = """
+node -v
+corepack enable
+
+# Choose ONE package manager strategy below:
+
+# pnpm (recommended for many modern repos):
+# corepack prepare pnpm@9.7.1 --activate
+# pnpm install --frozen-lockfile
+
+# yarn:
+# corepack prepare yarn@4.5.0 --activate
+# yarn install --immutable
+
+# npm (classic):
+npm ci
+"""
+
+[tasks.lint]
+description = "Lint"
+run = """
+npm run lint
+"""
+
+[tasks.test]
+description = "Test"
+run = """
+npm test
+"""
+
+[tasks.build]
+description = "Build"
+run = """
+npm run build
+"""
+
+[tasks.ci]
+description = "CI gate: install + lint + test + build"
+run = """
+npm ci
+npm run lint
+npm test
+npm run build
+"""

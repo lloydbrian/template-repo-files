@@ -1,0 +1,56 @@
+#SAMPLE .mise.toml
+
+[tools]
+python = "3.14.3"
+
+
+[env]
+# Common for src-layout projects if you don't install editable:
+PYTHONPATH = "./src"
+PIP_DISABLE_PIP_VERSION_CHECK = "1"
+PYTHONDONTWRITEBYTECODE = "1"
+PYTHONUNBUFFERED = "1"
+
+# should only be run inside the container or with the virtual environment activated locally
+# command bootstrap is executed only once at the start of the project to set up the environment, install dependencies, etc
+[tasks.bootstrap]
+description = "Create venv and install locked dependencies + pre-commit hooks"
+run = """
+uv venv
+if [ ! -f uv.lock ]; then uv lock; fi
+uv sync --dev
+uv run pre-commit install
+"""
+
+[tasks.format]
+description = "Auto-format code"
+run = """
+uv run ruff format .
+"""
+
+[tasks.lint]
+description = "Lint (and fail on issues)"
+run = """
+uv run ruff check .
+"""
+
+[tasks.test]
+description = "Run unit tests"
+run = """
+uv run pytest -q
+"""
+
+[tasks.security]
+description = "Basic dependency audit (optional: add pip-audit to dev deps)"
+run = """
+uv run pip-audit || true
+"""
+
+[tasks.ci]
+description = "CI gate: lint + tests + pre-commit"
+run = """
+uv sync --dev
+uv run pre-commit run --all-files
+uv run ruff check .
+uv run pytest
+"""
