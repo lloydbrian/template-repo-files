@@ -18,6 +18,7 @@ brew install coreutils gnu-sed
 brew install openssl readline zlib sqlite
 brew install zsh-autosuggestions zsh-syntax-highlighting starship
 brew install --cask font-jetbrains-mono-nerd-font   # or any Nerd Font
+brew install --cask iterm2 --appdir=~/Applications # update the settings of iterm2 to use jetbrains font
 brew install mise
 echo 'eval "$(mise activate zsh)"' >>~/.zshrc
 source ~/.zshrc
