@@ -11,8 +11,8 @@ brew update
 brew upgrade
 brew cleanup -s
 brew doctor
-brew install colima
 brew install docker docker-compose
+brew install colima
 brew install git gh wget jq tree ripgrep fd fzf bat
 brew install coreutils gnu-sed
 brew install openssl readline zlib sqlite
